@@ -1,0 +1,29 @@
+The scripts benchmark.pl and benchmark.py were developed in order to
+compare the difference in raw performance between perl and python on
+the following tasks:
+
+    1. allocating strings in perl vs byte arrays in python
+    2. looping over each byte and extract it for use in an if test
+    3. setting each byte to zero
+    4. executing Sieve of Erostothenes algorithm 100 times with a 
+         1 million sieve size using identical algorithms
+
+The algorithm chosen is the one found in PrimePY_2.py, which allocates
+a byte array that's only half the sieve size -- because even numbers
+can be ignored.
+
+One major difference in the two implementations is that the perl 
+benchmark uses a set_rng() function that loops over the string in 
+steps in order to mark multiples; whereas, the python benchmark uses 
+python's array slicing range syntax with a step option to mark multiples.
+
+# perl   - using string buffer, for/while, substr() and index()
+# python - using bytearray buffer, slicing with stepping
+
+                                 ---- Duration ----  
+Task             Iter    Bytes      perl     python     Perl (vs Python)
+allocate          200   500,000   0.003477  0.032593    -89.3% (faster)
+inspect           200   500,000   3.578691  2.360475    +51.6% (slower)
+set to zero       200   500,000   3.182567  2.403099    +32.4% (slower)
+sieve             200   500,000   9.244517  0.176989  5,123.2% (slower)
+sieve w inline C  200   500,000   0.092113  0.176989    -48.0% (faster)

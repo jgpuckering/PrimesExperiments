@@ -1,0 +1,55 @@
+primes_1_jgp.pl         
+Passes: 68, Time: 5.016747, Avg: 0.073776, Limit: 1000000, Count: 78498, Valid: yes
+marghidanu; 68; 5.016747; 1; algorithm=base,faithful=yes
+
+primes_2_jgp.pl         
+Passes: 161, Time: 5.022658, Avg: 0.031197, Limit: 1000000, Count: 78498, Valid: yes
+kjetillll; 161; 5.022658; 1; algorithm=base,faithful=yes,bits=8
+
+primes_pdl_1.pl         
+Passes: 773, Time: 5.003902, Avg: 0.006473, Limit: 1000000, Count: 78498, Valid: yes
+Luis_Mochán_(wlmb)_Perl/PDL; 773; 5.003902; 1; algorithm=base,faithful=yes,bits=8
+
+primes_pdl_2.pl         
+Passes: 1253, Time: 5.000292, Avg: 0.003991, Limit: 1000000, Count: 78498, Valid: yes
+Luis_Mochán_(wlmb)_Perl/PDL-PP; 1253; 5.000292; 1; algorithm=base,faithful=yes,bits=8
+
+primes_2_noloop.pl      
+Passes: 149, Time: 5.008612, Avg: 0.033615, Limit: 1000000, Count: 78498, Valid: yes
+jgpuckering/primes_2_noloop.pl; 149; 5.008612; 1; algorithm=base,faithful=yes,bits=8
+
+primes_substr.pl        
+Passes: 123, Time: 5.004201, Avg: 0.040685, Limit: 1000000, Count: 78498, Valid: yes
+jgpuckering/primes_substr.pl; 123; 5.004201; 1; algorithm=base,faithful=yes,bits=8
+
+primes_vec_1.pl         
+Passes: 31, Time: 5.055305, Avg: 0.163074, Limit: 1000000, Count: 78498, Valid: yes
+jgpuckering/primes_vec_1.pl; 31; 5.055305; 1; algorithm=base,faithful=yes,bits=8
+
+primes_vec_2.pl         
+Passes: 28, Time: 5.082888, Avg: 0.181532, Limit: 1000000, Count: 78498, Valid: yes
+jgpuckering/primes_vec_2.pl; 28; 5.082888; 1; algorithm=base,faithful=yes,bits=8
+
+primes_bitvec_1.pl      
+Passes: 2735, Time: 5.001112, Avg: 0.001829, Limit: 1000000, Count: 78498, Valid: yes
+jgpuckering/primes_bitvec_1.pl; 2735; 5.001112; 1; algorithm=base,faithful=yes,bits=1
+
+primes_bitvec_2.pl      
+Passes: 49, Time: 5.076909, Avg: 0.103610, Limit: 1000000, Count: 78498, Valid: yes
+jgpuckering/primes_bitvec_2.pl; 49; 5.076909; 1; algorithm=base,faithful=yes,bits=1
+
+primes_inlineC.pl       
+Passes: 2909, Time: 5.001026, Avg: 0.001719, Limit: 1000000, Count: 78498, Valid: yes
+jgpuckering/inlineC; 2909; 5.001026; 1; algorithm=base,faithful=yes,bits=8
+
+python PrimePY_1.py     
+Passes: 489, Time: 5.000778500005254, Avg: 0.010226540899806244, Limit: 1000000, Count: 78498, Valid: True
+davepl; 489; 5.000778500005254; 1; algorithm=base,faithful=yes
+
+python PrimePY_2.py     
+Passes: 3852, Time: 5.000281499989796, Avg: 0.001298100077878971, Limit: 1000000, Count: 78498, Valid: True
+ssovest;  3852; 5.000281499989796; 1; algorithm=base,faithful=yes,bits=8
+
+python PrimePY_3.py     
+Passes: 10453, Time: 5.000337199991918, Avg: 0.00047836383813182034, Limit: 1000000, Count: 78498, Valid: True
+emillynge_numpy;  10453; 5.000337199991918; 1; algorithm=base,faithful=no,bits=8

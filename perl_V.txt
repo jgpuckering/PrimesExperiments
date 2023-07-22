@@ -1,0 +1,100 @@
+Summary of my perl5 (revision 5 version 32 subversion 1) configuration:
+   
+  Platform:
+    osname=MSWin32
+    osvers=10.0.19042.746
+    archname=MSWin32-x64-multi-thread
+    uname='Win32 strawberry-perl 5.32.1.1 #1 Sun Jan 24 15:00:15 2021 x64'
+    config_args='undef'
+    hint=recommended
+    useposix=true
+    d_sigaction=undef
+    useithreads=define
+    usemultiplicity=define
+    use64bitint=define
+    use64bitall=undef
+    uselongdouble=undef
+    usemymalloc=n
+    default_inc_excludes_dot=define
+    bincompat5005=undef
+  Compiler:
+    cc='gcc'
+    ccflags =' -DWIN32 -DWIN64 -D__USE_MINGW_ANSI_STDIO -DPERL_TEXTMODE_SCRIPTS -DPERL_IMPLICIT_CONTEXT -DPERL_IMPLICIT_SYS -DUSE_PERLIO -fwrapv -fno-strict-aliasing -mms-bitfields'
+    optimize='-s -O2'
+    cppflags='-DWIN32'
+    ccversion=''
+    gccversion='8.3.0'
+    gccosandvers=''
+    intsize=4
+    longsize=4
+    ptrsize=8
+    doublesize=8
+    byteorder=12345678
+    doublekind=3
+    d_longlong=define
+    longlongsize=8
+    d_longdbl=define
+    longdblsize=16
+    longdblkind=3
+    ivtype='long long'
+    ivsize=8
+    nvtype='double'
+    nvsize=8
+    Off_t='long long'
+    lseeksize=8
+    alignbytes=8
+    prototype=define
+  Linker and Libraries:
+    ld='g++'
+    ldflags ='-s -L"C:\STRAWB~1\perl\lib\CORE" -L"C:\STRAWB~1\c\lib"'
+    libpth=C:\STRAWB~1\c\lib C:\STRAWB~1\c\x86_64-w64-mingw32\lib C:\STRAWB~1\c\lib\gcc\x86_64-w64-mingw32\8.3.0
+    libs= -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 -luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
+    perllibs= -lmoldname -lkernel32 -luser32 -lgdi32 -lwinspool -lcomdlg32 -ladvapi32 -lshell32 -lole32 -loleaut32 -lnetapi32 -luuid -lws2_32 -lmpr -lwinmm -lversion -lodbc32 -lodbccp32 -lcomctl32
+    libc=
+    so=dll
+    useshrplib=true
+    libperl=libperl532.a
+    gnulibc_version=''
+  Dynamic Linking:
+    dlsrc=dl_win32.xs
+    dlext=xs.dll
+    d_dlsymun=undef
+    ccdlflags=' '
+    cccdlflags=' '
+    lddlflags='-mdll -s -L"C:\STRAWB~1\perl\lib\CORE" -L"C:\STRAWB~1\c\lib"'
+
+
+Characteristics of this binary (from libperl): 
+  Compile-time options:
+    HAS_TIMES
+    HAVE_INTERP_INTERN
+    MULTIPLICITY
+    PERLIO_LAYERS
+    PERL_COPY_ON_WRITE
+    PERL_DONT_CREATE_GVSV
+    PERL_IMPLICIT_CONTEXT
+    PERL_IMPLICIT_SYS
+    PERL_MALLOC_WRAP
+    PERL_OP_PARENT
+    PERL_PRESERVE_IVUV
+    USE_64_BIT_INT
+    USE_ITHREADS
+    USE_LARGE_FILES
+    USE_LOCALE
+    USE_LOCALE_COLLATE
+    USE_LOCALE_CTYPE
+    USE_LOCALE_NUMERIC
+    USE_LOCALE_TIME
+    USE_PERLIO
+    USE_PERL_ATOF
+  Built under MSWin32
+  Compiled at Jan 24 2021 15:05:42
+  %ENV:
+    PERL5LIB="C:\Users\jgpuckering\MyScripts\MyPerl\lib;C:\Users\jgpuckering\MyScripts\MyCpanModules"
+  @INC:
+    C:\Users\jgpuckering\MyScripts\MyPerl\lib
+    C:\Users\jgpuckering\MyScripts\MyCpanModules
+    C:/Strawberry/perl/site/lib/MSWin32-x64-multi-thread
+    C:/Strawberry/perl/site/lib
+    C:/Strawberry/perl/vendor/lib
+    C:/Strawberry/perl/lib
