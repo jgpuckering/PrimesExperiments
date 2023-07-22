@@ -6,24 +6,74 @@ the following tasks:
     2. looping over each byte and extract it for use in an if test
     3. setting each byte to zero
     4. executing Sieve of Erostothenes algorithm 100 times with a 
-         1 million sieve size using identical algorithms
+         sieve size of one million using identical algorithms
 
 The algorithm chosen is the one found in PrimePY_2.py, which allocates
 a byte array that's only half the sieve size -- because even numbers
 can be ignored.
 
-One major difference in the two implementations is that the perl 
-benchmark uses a set_rng() function that loops over the string in 
-steps in order to mark multiples; whereas, the python benchmark uses 
-python's array slicing range syntax with a step option to mark multiples.
+The python implementation uses the bytearray datatype and slicing to
+mark bits for each factor multiple.  Python's list/array slice syntax
+also allows the specification of a step, which is hugely beneficial
+in this situation because the algorithm requires that factors be marked
+at multiple intervals -- which is a perfect application for the step
+option.
 
-# perl   - using string buffer, for/while, substr() and index()
-# python - using bytearray buffer, slicing with stepping
+Perl lacks a bytearray datatype, but unlike python strings are mutable
+and can be manipulated much like a byte array.
 
-                                 ---- Duration ----  
-Task             Iter    Bytes      perl     python     Perl (vs Python)
-allocate          200   500,000   0.003477  0.032593    -89.3% (faster)
-inspect           200   500,000   3.578691  2.360475    +51.6% (slower)
-set to zero       200   500,000   3.182567  2.403099    +32.4% (slower)
-sieve             200   500,000   9.244517  0.176989  5,123.2% (slower)
-sieve w inline C  200   500,000   0.092113  0.176989    -48.0% (faster)
+The perl benchmark script uses the same overall algorithm as the
+python script, but it varies with respect to how multiple factors
+are flagged.  A command line option (-algorithm) allows selection from
+one of three set_rng() subroutines which do the actual bit setting
+work.  The options are:
+
+    substr - uses indexing to find and substr to set bytes
+    
+    bitwise - creates a bitmask and uses bitwise AND to set bytes
+    
+    inline - uses a C function to replace bytes
+
+Here is the result from running the python benchmark, followed by
+each variant of the perl benchmark:
+
+
+                                 ---- Duration ----   
+Task             Iter    Bytes      perl     python      Perl (vs Python)
+--------------   ----   -------   --------  --------   ------------------
+allocate          200   500,000   0.003477  0.032593      -89.3% (faster)
+inspect           200   500,000   3.578691  2.360475      +51.6% (slower)
+set to zero       200   500,000   3.182567  2.403099      +32.4% (slower)
+sieve_substr      200   500,000   9.189510  0.176989   +5,092.1% (slower)
+sieve_bitwise     200   500,000   3.508915  0.176989   +1,882.6% (slower)
+sieve_inline      200   500,000   0.093102  0.176989      -47.4% (faster)
+
+Python's list slicing with step option clearly gives it a huge 
+advantage over native perl solutions.  The perl substr solution is 
+forced to perform a very large number of loops that run at interpreter
+speed rather than machine speed.  Python's slicing runs at machine
+speed.
+
+The closest native alternative in perl is to construct string bit
+vectors and use bitwise AND'ing.  That at least happens down at machine
+level, although the solution still has the large overhead of creating
+these large string bit vectors.  It's interesting to note that the
+time for this solution is comparable to the time it takes to loop
+through 500,000 bytes and set them to '0'.
+
+Replacing most of the interpreter loops with machine loops yields an
+enormous performance gain.  The inline solution uses a small bit of
+C code to step over a range of bytes and make changes.  
+
+Although python outperform perl on the sieve benchmark, these results
+show that python's advantage came from a builtin feature lacking in
+perl.  Providing perl with such a feature, as an inline C routine,
+more than levelled the playing field.
+
+There is a Bit::Vector module in CPAN which has functions for scanning
+and modifying intervals of bits in a bit vector.  Unfortunately there 
+is no step option -- but one could easily be added.  If that were to
+be done, then a perl implementation could be written to use that
+module and it would likely perform similar to python on the sieve
+benchmark.
+

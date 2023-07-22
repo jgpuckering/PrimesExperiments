@@ -11,3 +11,5 @@ Along the way, a web application was built to be able to view and filter results
 After watching a few videos comnparing languages, I came across one comparing perl and python.  Perl did not fare well, so I decided to look into the solutions and see what was going on and whether they could be improved.  This repository contains the results of my research.
 
 A compilation of my notes and findings and conclusions can be found in AAA_README.txt.
+
+See also benchmark_results.txt.
