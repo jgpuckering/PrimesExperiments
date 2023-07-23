@@ -15,6 +15,7 @@ class PrimeSieve:
     print_results will dump the count to check validity."""
 
     prime_counts = { 10 : 4,                 # Historical data for validating our results - the number of primes
+                     40 : 12,
                      60 : 17,
                     100 : 25,                # to be found under some limit, such as 168 primes under 1000
                     1000 : 168,
@@ -40,7 +41,7 @@ class PrimeSieve:
             return self.prime_counts[self._size] == self.count_primes()  # false for an unknown upper_limit, can't assume false == bad
         return False
 
-    def run_sieve(self):
+    def run_sieve(self, forloop):
 
         """Calculate the primes up to the specified limit"""
 
@@ -62,9 +63,21 @@ class PrimeSieve:
             # print("size %d bitslen %d start %d step %d size %d" % (self._size, bitslen, start, step, size))
             # print(b"\x00" * (size // step + bool(size % step)) )
             times = size // step + bool(size % step)    # bool is (a subclass of) int in python
-            self._bits[start :: step] = b"\x00" * times
-            self._mloops += times
-            self._iloops += 1
+
+            if forloop:
+                # use for loop with step
+                for i in range(start, bitslen, step):
+                    # print("i", i, "bits[i:] before", self._bits[i:i+1])
+                    self._bits[i:i+1] = b"\x00";            
+                    # print("i", i, "bits[i:]  after", self._bits[i:i+1])
+                    self._iloops += 1
+                # print(self._bits)
+            else:
+                # use slicing with step
+                self._bits[start :: step] = b"\x00" * times
+                self._mloops += times
+                self._iloops += 1
+            
             factor += 1
 
     def count_primes(self):
@@ -100,10 +113,10 @@ class PrimeSieve:
 
         if show_results:
             print()
-        print("Passes: %s, Time: %6f, Avg: %6f, Limit: %d, Count: %d, Valid: %s" % (passes, duration, duration/passes, self._size, count, self.validate_results()))
+        print("Passes: %s, Time: %6f, Avg: %6f, Passes/sec: %.1f, Limit: %d, Count: %d, Valid: %s" % (passes, duration, duration/passes, passes/duration, self._size, count, self.validate_results()))
 
         # Following 2 lines added by rbergen to conform to drag race output format
-        print("ssovest; %d;%6f;1;algorithm=base,faithful=yes,bits=8" % (passes, duration));
+        print("ssovest(jgp); %d;%6f;1;algorithm=base,faithful=yes,bits=8" % (passes, duration));
 
 
 # MAIN Entry
@@ -113,27 +126,29 @@ if __name__ == "__main__":
 
     parser = ArgumentParser(description="Python Prime Sieve")
     parser.add_argument("--passes", "-p", help="Number of passes", type=int, default=0)
-    parser.add_argument("--limit", "-l", help="Upper limit for calculating prime numbers", type=int, default=1_000_000)
-    parser.add_argument("--time", "-t", help="Time limit", type=float, default=5)
-    parser.add_argument("--show", "-s", help="Print found prime numbers", action="store_true")
+    parser.add_argument("--limit",  "-l", help="Upper limit for calculating prime numbers", type=int, default=1_000_000)
+    parser.add_argument("--time",   "-t", help="Time limit", type=float, default=5)
+    parser.add_argument("--show",   "-s", help="Print found prime numbers", action="store_true")
+    parser.add_argument("--forloop","-f", help="Use for loop instead of slicer", action="store_true")
 
     args         = parser.parse_args()
     limit        = args.limit
     timeout      = args.time
     show_results = args.show
     passes       = args.passes
+    forloop      = args.forloop
 
     time_start = default_timer()                           # Record our starting time
     
     if passes > 0:
         for n in range(0, passes):
             sieve = PrimeSieve(limit)                          # Calc the primes up to a million
-            sieve.run_sieve()                                  # Find the results
+            sieve.run_sieve(forloop)                           # Find the results
     else:
         time_start = default_timer()                           # Record our starting time
         while (default_timer() - time_start < timeout):        # Run until more than 10 seconds have elapsed
             sieve = PrimeSieve(limit)                          # Calc the primes up to a million
-            sieve.run_sieve()                                  # Find the results
+            sieve.run_sieve(forloop)                           # Find the results
             passes = passes + 1                                # Count this pass
 
     time_delta = default_timer() - time_start              # After the "at least 10 seconds", get the actual elapsed
