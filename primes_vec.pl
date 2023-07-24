@@ -49,12 +49,13 @@ package PrimeSieve {
             }
         } else {
             for (my $factor = 3; $factor <= $q; $factor += 2) {
+                next if vec( $self->{bits}, $factor, 1 );                   
                 $self->set_rng( $factor*$factor, $size, 2*$factor )
-                    unless vec( $self->{bits}, $factor, 1 );                   
                 # loops are counted in set_rng
             }           
         }
 
+        return $self->{loops};
         # alternate implementation not using for()
         # if ($inline) {           
             # while ($factor <= $q) {
@@ -92,9 +93,10 @@ package PrimeSieve {
         my @primes = $self->get_primes();
         my $count = @primes;
         printf "%s\n", join ',', @primes if $show_primes;
-        printf "jgpuckering/$0;%d;%f;%d;algorithm=base,faithful=yes,bits=8\n", $passes, $duration, 1;
-        printf {*STDERR} "Passes: %d, Time: %f, Avg: %f, Limit: %d, Count: %d, Valid: %s\n",
-          $passes, $duration, $duration / $passes,
+        my $script = (split /\\/, $0)[-1];    # get script name sans path        
+        printf "jgpuckering/$script;%d;%f;%d;algorithm=base,faithful=yes,bits=8\n", $passes, $duration, 1;
+        printf {*STDERR} "Passes: %d, Time: %f, Avg: %f, Passes/sec: %.1f, Limit: %d, Count: %d, Valid: %s\n",
+          $passes, $duration, $duration / $passes, $passes / $duration, 
           $self->{sieve_size}, $count, $self->validate_results($count);
     }
 
@@ -140,6 +142,7 @@ GetOptions(
 
 my $passes   = 0;
 my $duration = 0;
+my $loops    = 0;
 my $sieve;
 my $start_time = time;
 
@@ -148,18 +151,20 @@ sub duration { time() - $start_time }
 if ($opt_passes) {
     $sieve = PrimeSieve->new($opt_size);
     for ( my $i = 0; $i < $opt_passes; $i++ ) {
-        $sieve->run_sieve($opt_inline);
+        $loops += $sieve->run_sieve($opt_inline);
         $passes++;
     }
 } else {
     while (duration() < $opt_duration ) {
         $sieve = PrimeSieve->new($opt_size);
-        $sieve->run_sieve($opt_inline);
+        $loops += $sieve->run_sieve($opt_inline);
         $passes++;
     }
 }
 
 $sieve->print_results( $opt_primes, duration(), $passes )
     unless $opt_nostats;
+
+printf("loops = %d\n", $loops);
 
 __END__
