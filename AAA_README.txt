@@ -71,14 +71,14 @@ nytprof_<script>.  The instructions are as follows:
 Results of GitHub perl solutions
 --------------------------------
 
-primes_1.pl - using a list
+  primes_1.pl - using a list
     Passes: 68, Time: 5.016747, Avg: 0.073776, Limit: 1000000, Count: 78498, Valid: yes
     marghidanu; 68; 5.016747; 1; algorithm=base,faithful=yes
 
     This implementation uses a list as the bitmap.  Lists are not arrays
     not bitmaps so this approach is costly in both space and time.
 
-primes_2.pl - using string bitmaps and perl's ability bitwise OR them
+  primes_2.pl - using string bitmaps and perl's ability bitwise OR them
     Passes: 161, Time: 5.022658, Avg: 0.031197, Limit: 1000000, Count: 78498, Valid: yes
     kjetillll; 161; 5.022658; 1; algorithm=base,faithful=yes,bits=8
 
@@ -133,7 +133,7 @@ primes_2.pl - using string bitmaps and perl's ability bitwise OR them
     at the top of this script, you'll end up enabling the bitwise feature.
     and perl will complain unless you change the OR operator to |.=
 
-primes_pdl_1.pl - using PDL
+  primes_pdl_1.pl - using PDL
     Passes: 773, Time: 5.003902, Avg: 0.006473, Limit: 1000000, Count: 78498, Valid: yes
     Luis_Mochán_(wlmb)_Perl/PDL; 773; 5.003902; 1; algorithm=base,faithful=yes,bits=8
 
@@ -148,7 +148,7 @@ primes_pdl_1.pl - using PDL
                 unless $bits( ($factor) );
         }
 
-perl primes_pdl_2.pl - using Inline PDL code
+  perl primes_pdl_2.pl - using Inline PDL code
     Passes: 1253, Time: 5.000292, Avg: 0.003991, Limit: 1000000, Count: 78498, Valid: yes
     Luis_Mochán_(wlmb)_Perl/PDL-PP; 1253; 5.000292; 1; algorithm=base,faithful=yes,bits=8
 
@@ -178,10 +178,34 @@ perl primes_pdl_2.pl - using Inline PDL code
         );
     EOPP
 
+
 Results of my solutions
 -----------------------
 
-primes_2_noloop.pl - primes_2 using index()
+The following three solutions use the algorithm in PrimesPY2.py.  That
+algorithm uses half the memory of most solutions because it completely
+ignore even numbers.  Also, it starts by marking all positions with 1
+and then zeroing those positions that are prime -- the opposite of most
+other scripts.
+
+  primes_3_substr.pl - uses bytestring with index, substr and looping
+    jgpuckering/primes_3_substr.pl;110;5.008113;1;algorithm=base,faithful=yes,bits=8
+    Passes: 110, Time: 5.01, Avg: 0.045528, Passes/sec 22.0, Limit: 1000000, Count: 78498, Valid: yes
+
+  primes_3_bitwise.pl - uses bytestring with bitwise AND'ing
+    jgpuckering/primes_3_bitwise.pl;268;5.018476;1;algorithm=base,faithful=yes,bits=8
+    Passes: 268, Time: 5.02, Avg: 0.018726, Passes/sec 53.4, Limit: 1000000, Count: 78498, Valid: yes
+
+  primes_3_inline.pl - uses bytestring and inline C subroutine for bit changes
+    jgpuckering/primes_3_inline.pl;10888;5.000160;1;algorithm=base,faithful=yes,bits=8
+    Passes: 10888, Time: 5.00, Avg: 0.000459, Passes/sec 2177.5, Limit: 1000000, Count: 78498, Valid: yes
+
+
+The following solutions were created to explore other approaches and
+use the overall algorithm found in primes_2.pl.  Where they vary is in
+the manner in which bits are tested and changed.
+
+  primes_2_noloop.pl - primes_2 using index()
     Passes: 149, Time: 5.008612, Avg: 0.033615, Limit: 1000000, Count: 78498, Valid: yes
     jgpuckering/primes_2_noloop.pl; 149; 5.008612; 1; algorithm=base,faithful=yes,bits=8
 
@@ -190,18 +214,7 @@ primes_2_noloop.pl - primes_2 using index()
     the Python implementation does.  However, this did not provide
     much improvement in that specific area of code.
 
-primes_substr.pl - primes_2 using loop and substr() for bit setting
-    Passes: 123, Time: 5.004201, Avg: 0.040685, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_substr.pl; 123; 5.004201; 1; algorithm=base,faithful=yes,bits=8
-
-    This solution, like primes_2, uses a string as a bitmap and substr
-    to look at or set bits.  The big difference is that it uses a
-    straightforward for() loop to set bits beyond factor-squared,
-    whereas primes_2 constructed a string bitmask and then used
-    bitwise OR to set the bits thus avoiding costly interpreter looping.
-    The for() loop definitely hurts the performance of this solution.
-
-primes_vec_1.pl - using the perl vec() operator and a set_rng() sub
+  primes_vec_1.pl - using the perl vec() operator and a set_rng() sub
     Passes: 31, Time: 5.055305, Avg: 0.163074, Limit: 1000000, Count: 78498, Valid: yes
     jgpuckering/primes_vec_1.pl; 31; 5.055305; 1; algorithm=base,faithful=yes,bits=8
 
@@ -215,7 +228,7 @@ primes_vec_1.pl - using the perl vec() operator and a set_rng() sub
     the set_rng code) and found that calling the subroutine was
     often about 20 ms faster for some reason I don't understand.
 
-primes_vec_2.pl - using the perl vec() operator and loop
+  primes_vec_2.pl - using the perl vec() operator and loop
     Passes: 28, Time: 5.082888, Avg: 0.181532, Limit: 1000000, Count: 78498, Valid: yes
     jgpuckering/primes_vec_2.pl; 28; 5.082888; 1; algorithm=base,faithful=yes,bits=8
 
@@ -223,20 +236,46 @@ primes_vec_2.pl - using the perl vec() operator and loop
     that are beyond each factor.  Once again, the performance suffers
     greatly due to the interpreter loop.
 
-
-primes_bitvec_1.pl - calling Bit::Vector primes()
+  primes_bitvec_1.pl - calling Bit::Vector primes()
     Passes: 2735, Time: 5.001112, Avg: 0.001829, Limit: 1000000, Count: 78498, Valid: yes
     jgpuckering/primes_bitvec_1.pl; 2735; 5.001112; 1; algorithm=base,faithful=yes,bits=1
 
-    Uses CPAN module Bit::Vector
+    Uses CPAN module Bit::Vector and calls its primes() function.  Despite
+    all the sieve work being pushed down into this module's implementation
+    (which is in compiled code) it did not outperform the inline C solution.
 
-primes_bitvec_2.pl - using Bit::Vector Bit_On() and loops
+  primes_bitvec_2.pl - using Bit::Vector Bit_On() and loops
     Passes: 49, Time: 5.076909, Avg: 0.103610, Limit: 1000000, Count: 78498, Valid: yes
     jgpuckering/primes_bitvec_2.pl; 49; 5.076909; 1; algorithm=base,faithful=yes,bits=1
 
-primes_inlineC.pl - usine inline C set_bit_range()
+    Uses CPAN module Bit::Vector instead of a string as a byte array.
+    Unfortunately the interval functions in this module do not support
+    a step option, so marking bits required a for() loop.  If the module
+    were enhanced so that interval functions included a step parameter,
+    the performance of this implementation would likely be similar to
+    that of PrimesPY_2.py (which uses a bytearray and array slicing with
+    stepping).
+
+
+These two solutions are early versions of primes_3_substr and primes_3_inline.
+
+  primes_substr.pl - primes_2 using loop and substr() for bit setting
+    Passes: 123, Time: 5.004201, Avg: 0.040685, Limit: 1000000, Count: 78498, Valid: yes
+    jgpuckering/primes_substr.pl; 123; 5.004201; 1; algorithm=base,faithful=yes,bits=8
+
+  primes_inlineC.pl - usine inline C set_bit_range()
     Passes: 2909, Time: 5.001026, Avg: 0.001719, Limit: 1000000, Count: 78498, Valid: yes
     jgpuckering/inlineC; 2909; 5.001026; 1; algorithm=base,faithful=yes,bits=8
+
+
+The following scripts are clones of like-named scripts (sans _jgp) that
+were modified to have command-line options and to be more consistent
+with each other (except in their algorithms).
+
+  primes_1_jgp.pl
+  primes_2_jgp.pl
+  primes_pdl_1_jgp.pl
+  primes_pdl_2_jgp.pl
 
 
 Results of GitHub python solutions
@@ -255,13 +294,13 @@ PrimePY_3.py - using numpy
     emillynge_numpy;  10453; 5.000337200; 1; algorithm=base,faithful=no,bits=8
 
 
-The Algorithm
--------------
+The Sieve of Eratosthenes
+-------------------------
 
 The sieve of Eratosthenes is a procedure for finding prime numbers
 up to N.  The procedure is:
 
-    1. Writing down the integers from 0 to N-1
+    1. Write down the integers from 0 to N
     2. Cross out 0 because it is considered non-prime
     3. Starting with factor 3, cross out every multiple of 3
        (leaving three unmarked)
@@ -272,7 +311,7 @@ up to N.  The procedure is:
 The time complexity of this algorithm is O( n log log n ).
 
 A common set of optimizations (to save loops and bit inspection/setting)
- is to:
+is to:
     -  Just before step 3, cross out all even numbers in the list
     -  At steps 3 and 4, skip every other multiple since those will
        be even numbers and already crossed out
@@ -285,7 +324,7 @@ Analysis
 --------
 
 All the perl implementations suffered when they had to loop over the
-map using for() or while().  These loops are done in the perl
+bit map using for() or while().  These loops are done in the perl
 interpreter and are painfully slow compared to executing native
 operations or compiled code.
 
@@ -331,8 +370,8 @@ necessitated the use of slow-running interpreter loops.
 Inline to the rescue
 --------------------
 
-What was needed was a custom bit-setting subroutine in written in C
-and callable from perl.  It would be used in the most loop-intensive
+What was needed was a custom bit-setting subroutine written in C and
+callable from perl.  It would be used in the most loop-intensive
 section of the algorithm.
 
 Writing C code for use with perl has traditionally meant setting up a
@@ -340,9 +379,9 @@ rather complicated environment for XS and becoming intimately
 familiar with these documents: perlxs perlxstut perlapi perlguts
 perlmod h2xs xsubpp ExtUtils::MakeMaker.
 
-Fortunately, there is an alternative.  The CPAN Inline module enables
-perl users to write inline code in various languages (notably C).
-See:
+Fortunately, there is now an alternative.  The CPAN Inline module
+enables perl users to write inline code in various languages (notably
+C). See:
 
     https://metacpan.org/pod/Inline
     https://metacpan.org/pod/Inline::C
@@ -361,18 +400,23 @@ following to my script:
         }
     __C__
 
-This simple C function does the workhorse job of setting bit at
-regular step-sized intervals between the start and stop positions.
-A string bitmap is used because strings are easy to manipulate in both
-perl and C, and based on other solutions are likely the fastest to
-access and update.  Though not as compact as the bit vectors we get
-from using vec() or Bit::Vector, the tradeoff of space vs time is
-worth it.
+This simple C function does the workhorse job of changing bytes at
+regular step-sized intervals between the start and stop positions. A
+string bitmap is used because strings are easy to manipulate in both
+perl and C, and based on other solutions seemed likely to be the
+fastest to access and update.  Though not as compact as the bit
+vectors we get from using vec() or Bit::Vector, the trade off between
+memory space and execution time seems worth it -- at least for primes
+up to 1 million.
 
-Of course, the entire seive algorithm could be implemented in C.  But
+Of course, the entire sieve algorithm could be implemented in C.  But
 I crafted this routine as a perl analog of python's bytearray slicing
-with stepping feature.  This was to enable a fair comparison between
-the languages.
+with stepping feature.  This was to enable a fairer comparison between
+the languages.  After all, one could likely find an algorithm for which
+perl had some unique feature absent from python that would give it a
+significant advantage.  If the objective is to compare language performance,
+one gets a distorted impression if a language happens to have a
+builtin feature that gives it an edge.
 
 
 The PrimePY_2.py algorithm
@@ -397,6 +441,26 @@ the bytearray which is constructed using [start : stop : step] indexing
 syntax.  No intepreter loop is needed for the this -- Python does
 the work internally, likely in a C routine and at machine speed.
 
+To understand the effect of slicing with stepping versus looping I
+modified PrimePY_2_jgp.py to do one or the other based on a --forloop
+command line parameter.  That gave me these results:
+
+  PrimePY_2_jgp.py - using multi-byte slicer with step
+    Passes: 3389, Time: 5.000472, Avg: 0.001476, Passes/sec: 677.7, Limit: 1000000, Count: 78498, Valid: True
+    ssovest(jgp); 3389;5.000472;1;algorithm=base,faithful=yes,bits=8
+    interpreter loops = 168  est machine loops = 811060
+
+  PrimePY_2_jgp.py - using single-byte slicer and for loop with step
+    Passes: 32, Time: 5.095781, Avg: 0.159243, Passes/sec: 6.3, Limit: 1000000, Count: 78498, Valid: True
+    ssovest(jgp); 32;5.095781;1;algorithm=base,faithful=yes,bits=8
+    interpreter loops = 811068  est machine loops = 0
+
+As these results demonstrate, the array slicing/step feature of python
+makes a huge difference compared to using a simple for loop and changing
+individual byte values. It shifts much of the work from interpreter looping
+into machine-level slicer routines.
+
+
 Comparing apples to apples
 --------------------------
 
@@ -405,40 +469,49 @@ comparable to the python solutions.  I did some benchmark testing
 of looping and string indexing with replacement and determined that
 python and perl have comparable speeds when doing such tasks.  So
 the big difference in performance between the python scripts and the
-perl scripts must lie in the algorithm.
+perl scripts must lie in the algorithm or some detail of its
+implementation.
 
-I prepared a clone of primesPY_2.py and a matching perl primes_py2.pl
-script.  For the perl script I used the exact same algorithm as the
+I prepared a clone of primesPY_2.py and a matching perl PrimesPY_2.pl
+script.  For the perl script I used almost the same algorithm as the
 python script.  The only difference was in the marking of multiples.
-Since perl doesn't have slicer syntax with steps, I wrote an inline
-C routine to do that work.  I also added a command line option so I could
-run the script with the C routine or with an equivalent perl routine.
+Since perl doesn't have slicer syntax with steps, I wrote an inline C
+routine to do that work.  I also added a command line option so I
+could run the script with the C routine or with an equivalent perl
+routine.  Here are the results of running them:
 
-primes_py2.pl - using a perl subroutine to emulate python slicer syntax
-    Passes: 104, Time: 5.048813, Avg: 0.048546, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_py2.pl;104;5.048813;1;algorithm=base,faithful=yes,bits=8
-    perl loops = 84368648  set_rng_inline C loops = 0
+  PrimePY_2_jgp.py - using for loop on byte array
+    Passes: 32, Time: 5.033307, Avg: 0.157291, Passes/sec: 6.4, Limit: 1000000, Count: 78498, Valid: True
+    ssovest(jgp); 32;5.033307;1;algorithm=base,faithful=yes,bits=8
+    interpreter loops = 811068  est machine loops = 0
 
-perl primes_py2.pl - using a C subroutine to emulate python slicer syntax
-    Passes: 9865, Time: 5.000291, Avg: 0.000507, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_py2.pl;9865;5.000291;1;algorithm=base,faithful=yes,bits=8
-    perl loops = 1657320  set_rng_inline C loops = 829160431720
+  PrimePY_2_jgp.pl
+    jgpuckering/PrimePY_2_jgp.pl;110;5.008157;1;algorithm=base,faithful=yes,bits=8
+    Passes: 110, Time: 5.008157, Avg: 0.045529, Passes/sec: 22.0, Limit: 1000000, Count: 78498, Valid: yes
+    interpreter loops = 89236070  machine loops = 0
 
-PrimePY_2_jgp.py
-    Passes: 3424, Time: 5.000426, Avg: 0.001460, Limit: 1000000, Count: 78498, Valid: True
-    ssovest; 3424;5.000426;1;algorithm=base,faithful=yes,bits=8
-    python loops = 168  slicer steps = 395614713304
+The above comparison shows that when perl and python both use looping
+to change individual bytes perl actually runs faster: 22.0 passes/sec
+vs 6.4.
 
-As these results demonstrate, the python script managed over 3,400 passes
-compared to a meagre 104 passes for the pure perl script.  But the
-perl script using the C routine to emulate array slicing with steps
-turned in over 9,800 passes.
+  PrimePY_2_jgp.py - using slice/step on byte array
+    Passes: 3145, Time: 5.000908, Avg: 0.001590, Passes/sec: 628.9, Limit: 1000000, Count: 78498, Valid: True
+    ssovest(jgp); 3145;5.000908;1;algorithm=base,faithful=yes,bits=8
+    interpreter loops = 168  est machine loops = 811060
 
-Another embellishment I added to these scripts was to count the
-number of perl/python interpreter loop and the number of machine
-loops that occurred within the inline C subroutine or the python
-array slice replacement. I tried this for various sieve sizes and got
-the following counts:
+  PrimePY_2_jgp.pl - using a C subroutine to emulate python slicer syntax
+    jgpuckering/PrimePY_2_jgp.pl;10631;5.000088;1;algorithm=base,faithful=yes,bits=8
+    Passes: 10631, Time: 5.000088, Avg: 0.000470, Passes/sec: 2126.2, Limit: 1000000, Count: 78498, Valid: yes
+    interpreter loops = 1786008  machine loops = 8622463908
+
+In this comparison we see python with byte array slicing/stepping vs
+perl using a C routine to change bytes (instead of slow interpreter
+looping). The python script turns in a respectable  628.9 passes per
+sec.  But the perl script manages a whopping 2216.2 passes/sec.
+
+To better understand the effect of interpreter looping versus machine
+looping I instrumented the scripts to generate counts of each. I
+tried this for various sieve sizes and got the following:
 
      ---------- interpreter loops -----------
           Size      perl       perl    python
@@ -459,9 +532,11 @@ the following counts:
 Note that the pure perl script experiences an exponential growth in
 interpreter loops as the sieve size increases, whereas the python script
 and its perl with inline C analog do not.  For those two scripts the
-exponential increase happens inside machine loops.  This accounts for
-the poor performance of the pure perl scripts relative to the python
-scripts.
+exponential increase happens inside machine loops.  Given how much
+faster machine looping it, this accounts for the superior performance
+any script that can push most of the byte changing down into machine
+looping.
+
 
 Returning the list of primes
 ----------------------------
@@ -479,6 +554,7 @@ would be faster, but I benchmarked 100 iterations of grep vs loop using
 primes_vec_2.pl and looping was faster by a significant margin.
 
     jgpuckering/primes_vec_2.pl;1;0.179584;1;algorithm=base,faithful=yes,bits=8
+
            Rate grep loop
     grep 17.7/s   -- -47%
     loop 33.2/s  87%   --
@@ -494,6 +570,7 @@ was clever, but not a better choice than a straightforward loop.
 In the end, however, the difference is not material to the overall
 execution speed of the script.
 
+
 Conclusion
 ----------
 
@@ -504,40 +581,40 @@ Python performance got even better when using a bytearray with array
 slicing using stepping -- a feature perl does not have.  And performance
 soared when using numpy.
 
+On the other hand, a python solution which eschews bytearray
+slicer/step and uses for loops didn't perform as well as perl.
+
 The GitHub perl with PDL solution was by far the fastest perl solution,
 but it was still slower than Python.  PDL, however, also suffers from
 the lack of a step option when byte slicing.
 
-Pushing the byte slicing down into an inline C subroutine made a 
-dramatic difference in perl performance.  This leveled the playing 
-field between perl and python.  If perl had a byte slice function 
-that supported steppping and replacement, it would have come out 
-roughly even with of python in this particular benchmark.
+Pushing the byte slicing down into an inline C subroutine made a
+dramatic difference in perl performance.  This more than levelled the
+playing field between perl and python.  If perl had a byte slice
+function that supported stepping and replacement, it likely would
+have come out roughly even with python on this particular benchmark.
 
-One drawback to using the Sieve of Eratosthenes as a benchmark is 
-that it is heavily skewed towards measuring raw interpreter looping 
-speed - especially as the sieve size increases.  
+In many applications, looping is handled within builtin functions or
+operators making the results from this benchmark of limited
+applicability in the real world.  On any benchmark where the need for
+looping grows exponentially with the data size, it matters a great
+deal in interpreted languages how much of the looping can be
+relegated to functions that execute machine code.  The Sieve of Eratosthenes
+is an atypical application in this respect.
 
-In many applications, looping is handled within builtin functions or 
-operators making the results from this benchmark of limited 
-applicability in the real world.  On any benchmark where the need for 
-looping grows exponentially with the data size, it matters a great 
-deal in interpreted languages how much of the looping can be 
-relegated to functions that execute machine code.
-
-Python's array slicing with optional stepping is a feature missing 
-from perl that would have been very helpful for this benchmark.  
-However, the absence of this feature in perl (and in CPAN) is likely 
-an indication that its usefulness in the real world is limited.  Perl 
-does have index slices, but not with stepping and not on strings.  If 
-such capabilities were needed often, they'd likely have been provdied 
-in a CPAN module implemented with XS and C code.
+Python's array slicing with optional stepping is a feature missing
+from perl that would have been very helpful for this benchmark.
+However, the absence of this feature in perl (and in CPAN) is likely
+an indication that its usefulness in the real world is limited.  If it
+were a commonly needed thing, then someone would have created a CPAN
+module for it by now.  But even the Bit::Vector module doesn't support
+intervals with step.
 
 In the rare cases where a perl script needs to execute thousands of
 loops, the Inline module provides an easy way to write C (or PDL) code
 that can push intensive operations down into machine code.
 
-When perl with inline C is compared to python with numpy, using the 
-same algorithm, the results are actually very close:  10,621 passes 
-for perl vs 10,970 passes for python.
+When perl with inline C is compared to python with numpy, using the
+same algorithm, the results are actually very close:  10,631 passes
+for perl vs 10,266 passes for python.
 
