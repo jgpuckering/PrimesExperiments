@@ -219,7 +219,6 @@ bytes.
   primes_vec.pl - using the perl vec() operator and a set_rng() sub
     jgpuckering/primes_vec.pl;28;5.183292;1;algorithm=base,faithful=yes,bits=8
     Passes: 28, Time: 5.183292, Avg: 0.185118, Passes/sec: 5.4, Limit: 1000000, Count: 78498, Valid: yes
-    loops = 22709904
 
     This was an attempt to use the most obvious solution to managing
     bitmaps in perl -- the vec() operator.  It uses a subroutine
@@ -230,7 +229,6 @@ bytes.
   primes_vec.pl - using the perl vec() operator with inline of set_rng()
     jgpuckering/primes_vec.pl;27;5.172999;1;algorithm=base,faithful=yes,bits=8
     Passes: 27, Time: 5.172999, Avg: 0.191593, Passes/sec: 5.2, Limit: 1000000, Count: 78498, Valid: yes
-    loops = 21898836
 
     Use vec() by directly looping (no subroutine) and setting the bits
     that are beyond each factor.  Once again, the performance suffers

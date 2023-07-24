@@ -44,7 +44,7 @@ package PrimeSieve {
                 next if vec( $self->{bits}, $factor, 1 );
                 for (my $i = $factor*$factor; $i <= $size; $i += 2*$factor) {
                     vec($self->{bits}, $i, 1) = 1;
-                    $self->{loops}++;
+                    # $self->{loops}++;
                 }
             }
         } else {
@@ -56,6 +56,7 @@ package PrimeSieve {
         }
 
         return $self->{loops};
+        
         # alternate implementation not using for()
         # if ($inline) {           
             # while ($factor <= $q) {
@@ -84,7 +85,7 @@ package PrimeSieve {
 
         for (my $i = $from; $i <= $to; $i += $step) {
             vec($self->{bits}, $i, 1) = 1;
-            $self->{loops}++;
+            # $self->{loops}++;
         }
     }
 
@@ -165,6 +166,6 @@ if ($opt_passes) {
 $sieve->print_results( $opt_primes, duration(), $passes )
     unless $opt_nostats;
 
-printf("loops = %d\n", $loops);
+# printf("loops = %d\n", $loops);
 
 __END__
