@@ -55,14 +55,14 @@ Benchmarking and Profiles
 
 The scripts contain their own benchmark code following Dave's design.
 A timer is set and run_sieve() is called repeatedly until 5 seconds
-has elapsed.  Then statistics are reported.
+has elapsed.  Then statistics are reported.  Most scripts have command
+line options to control sieve size or run a set number of passes.
 
 To achieve more reliable results, I turned of Wi-Fi, LAN networking and
 Bluetooth during the test period.
 
-I used the NYTProfile module from CPAN to do detailed profiling of each
-script execution and saved the results as HTML in folders named
-nytprof_<script>.  The instructions are as follows:
+I also used the NYTProfile module from CPAN to do detailed profiling
+save the results as HTML.  The instructions are as follows:
 
     perl -d:NYTProfile <script>.pl
     nytprofhtml -o nytprof_<script>
@@ -138,7 +138,7 @@ Results of GitHub perl solutions
     Luis_Mochán_(wlmb)_Perl/PDL; 773; 5.003902; 1; algorithm=base,faithful=yes,bits=8
 
     Uses Perl Data Language (similar to Python numpy) for more efficient
-    bit manipution.  This version uses a byte array and imports
+    bit manipulation.  This version uses a byte array and imports
     the module Nice::Slice so that it can loop and set bits using
     this syntax:
 
@@ -153,7 +153,7 @@ Results of GitHub perl solutions
     Luis_Mochán_(wlmb)_Perl/PDL-PP; 1253; 5.000292; 1; algorithm=base,faithful=yes,bits=8
 
     Uses Perl Data Language (similar to Python numpy) for more efficient
-    bit manipution.  Unlike perl_pdl_1.pl, which used PDL bit operations
+    bit manipulation.  Unlike perl_pdl_1.pl, which used PDL bit operations
     on bytes within a perl for() loop, this version uses the Inline module with
     language 'Pdlpp' to implement the entire sieve in PDL language using
     bits -- and compiling that into a DLL.
@@ -182,28 +182,29 @@ Results of GitHub perl solutions
 Results of my solutions
 -----------------------
 
-The following three solutions use the algorithm in PrimesPY2.py.  That
-algorithm uses half the memory of most solutions because it completely
-ignore even numbers.  Also, it starts by marking all positions with 1
-and then zeroing those positions that are prime -- the opposite of most
-other scripts.
+The following three solutions use the algorithm found in
+PrimesPY2.py, varying only in the way they actually change bytes.
+That algorithm uses half the memory of most solutions because it
+completely ignores even numbers.  Also, it starts by marking all
+positions with 1 and then zeroing those positions that are prime --
+the opposite of most other scripts.
 
-  primes_3_substr.pl - uses bytestring with index, substr and looping
+  primes_3_substr.pl - uses a string with index(), substr() and looping
     jgpuckering/primes_3_substr.pl;110;5.008113;1;algorithm=base,faithful=yes,bits=8
     Passes: 110, Time: 5.01, Avg: 0.045528, Passes/sec 22.0, Limit: 1000000, Count: 78498, Valid: yes
 
-  primes_3_bitwise.pl - uses bytestring with bitwise AND'ing
+  primes_3_bitwise.pl - uses a string with bitwise AND'ing to reduce looping
     jgpuckering/primes_3_bitwise.pl;268;5.018476;1;algorithm=base,faithful=yes,bits=8
     Passes: 268, Time: 5.02, Avg: 0.018726, Passes/sec 53.4, Limit: 1000000, Count: 78498, Valid: yes
 
-  primes_3_inline.pl - uses bytestring and inline C subroutine for bit changes
+  primes_3_inline.pl - uses a string and an inline C subroutine for byte changes
     jgpuckering/primes_3_inline.pl;10888;5.000160;1;algorithm=base,faithful=yes,bits=8
     Passes: 10888, Time: 5.00, Avg: 0.000459, Passes/sec 2177.5, Limit: 1000000, Count: 78498, Valid: yes
 
 
-The following solutions were created to explore other approaches and
-use the overall algorithm found in primes_2.pl.  Where they vary is in
-the manner in which bits are tested and changed.
+The following solutions were created to explore other approaches.  They
+use the algorithm found in primes_2.pl, varying in the way they change
+bytes.
 
   primes_2_noloop.pl - primes_2 using index()
     Passes: 149, Time: 5.008612, Avg: 0.033615, Limit: 1000000, Count: 78498, Valid: yes
@@ -212,11 +213,13 @@ the manner in which bits are tested and changed.
     This solution is essentially a clone of primes_2, but instead of
     a while loop to find the next non-prime is uses index() -- like
     the Python implementation does.  However, this did not provide
-    much improvement in that specific area of code.
+    much improvement in that specific area of code because the number
+    of loops needed to find the next non-prime is O( sqrt(N) ).
 
-  primes_vec_1.pl - using the perl vec() operator and a set_rng() sub
-    Passes: 31, Time: 5.055305, Avg: 0.163074, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_vec_1.pl; 31; 5.055305; 1; algorithm=base,faithful=yes,bits=8
+  primes_vec.pl - using the perl vec() operator and a set_rng() sub
+    jgpuckering/primes_vec.pl;28;5.183292;1;algorithm=base,faithful=yes,bits=8
+    Passes: 28, Time: 5.183292, Avg: 0.185118, Passes/sec: 5.4, Limit: 1000000, Count: 78498, Valid: yes
+    loops = 22709904
 
     This was an attempt to use the most obvious solution to managing
     bitmaps in perl -- the vec() operator.  It uses a subroutine
@@ -224,17 +227,21 @@ the manner in which bits are tested and changed.
     implementation of that simply loops and calls vec().  Interpreter
     loops are slow, so this solution performs very poorly.
 
-    I profiled this with and without the subroutine (i.e. inlining
-    the set_rng code) and found that calling the subroutine was
-    often about 20 ms faster for some reason I don't understand.
-
-  primes_vec_2.pl - using the perl vec() operator and loop
-    Passes: 28, Time: 5.082888, Avg: 0.181532, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_vec_2.pl; 28; 5.082888; 1; algorithm=base,faithful=yes,bits=8
+  primes_vec.pl - using the perl vec() operator with inline of set_rng()
+    jgpuckering/primes_vec.pl;27;5.172999;1;algorithm=base,faithful=yes,bits=8
+    Passes: 27, Time: 5.172999, Avg: 0.191593, Passes/sec: 5.2, Limit: 1000000, Count: 78498, Valid: yes
+    loops = 21898836
 
     Use vec() by directly looping (no subroutine) and setting the bits
     that are beyond each factor.  Once again, the performance suffers
     greatly due to the interpreter loop.
+
+    Inlining the code to avoid the overhead of subroutine calls made
+    little overall difference.  Profiling revealed the difference to
+    be mere milliseconds -- although strangely, using the subroutine
+    was usually a bit faster.  That difference accumulates such that
+    I got consistently faster results from the subroutine version than
+    the inline version on the 5 second benchmark -- as reflected above.
 
   primes_bitvec_1.pl - calling Bit::Vector primes()
     Passes: 2735, Time: 5.001112, Avg: 0.001829, Limit: 1000000, Count: 78498, Valid: yes
