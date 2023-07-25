@@ -112,7 +112,7 @@ package PrimeSieve {
         printf "%s\n", join ',', @primes if $show_primes;
         my $script = (split /\\/, $0)[-1];    # get script name sans path
         printf "jgpuckering/$script;%d;%f;%d;algorithm=base,faithful=%s,bits=8\n", $passes, $duration, 1, $f;
-        printf {*STDERR} "Passes: %d, Time: %.2f, Avg: %f, Passes/sec %.1f, Limit: %d, Count: %d, Valid: %s\n",
+        printf {*STDERR} "Passes: %d, Time: %.2f, Avg: %f, Passes/sec: %.1f, Limit: %d, Count: %d, Valid: %s\n",
           $passes, $duration, $duration / $passes, $passes / $duration,
           $self->{sieve_size}, $count, $f;
     }
