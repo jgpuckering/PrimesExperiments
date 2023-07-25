@@ -207,8 +207,8 @@ use the algorithm found in primes_2.pl, varying in the way they change
 bytes.
 
   primes_2_noloop.pl - primes_2 using index()
-    Passes: 149, Time: 5.008612, Avg: 0.033615, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_2_noloop.pl; 149; 5.008612; 1; algorithm=base,faithful=yes,bits=8
+    jgpuckering/primes_2_noloop.pl;147;5.026114;1;algorithm=base,faithful=yes,bits=8
+    Passes: 147, Time: 5.03, Avg: 0.034191, Passes/sec: 29.2, Limit: 1000000, Count: 78498, Valid: yes
 
     This solution is essentially a clone of primes_2, but instead of
     a while loop to find the next non-prime is uses index() -- like
@@ -242,16 +242,16 @@ bytes.
     the inline version on the 5 second benchmark -- as reflected above.
 
   primes_bitvec_1.pl - calling Bit::Vector primes()
-    Passes: 2735, Time: 5.001112, Avg: 0.001829, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_bitvec_1.pl; 2735; 5.001112; 1; algorithm=base,faithful=yes,bits=1
+    jgpuckering/primes_bitvec_1.pl;2695;5.001742;1;algorithm=base,faithful=yes,bits=1
+    Passes: 2695, Time: 5.00, Avg: 0.001856, Passes/sec: 538.8, Limit: 1000000, Count: 78498, Valid: yes
 
     Uses CPAN module Bit::Vector and calls its primes() function.  Despite
     all the sieve work being pushed down into this module's implementation
     (which is in compiled code) it did not outperform the inline C solution.
 
   primes_bitvec_2.pl - using Bit::Vector Bit_On() and loops
-    Passes: 49, Time: 5.076909, Avg: 0.103610, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_bitvec_2.pl; 49; 5.076909; 1; algorithm=base,faithful=yes,bits=1
+    jgpuckering/primes_bitvec_2.pl;47;5.105564;1;algorithm=base,faithful=yes,bits=1
+    Passes: 47, Time: 5.11, Avg: 0.108629, Passes/sec: 9.2, Limit: 1000000, Count: 78498, Valid: yes
 
     Uses CPAN module Bit::Vector instead of a string as a byte array.
     Unfortunately the interval functions in this module do not support
@@ -265,13 +265,12 @@ bytes.
 These two solutions are early versions of primes_3_substr and primes_3_inline.
 
   primes_substr.pl - primes_2 using loop and substr() for bit setting
-    Passes: 123, Time: 5.004201, Avg: 0.040685, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/primes_substr.pl; 123; 5.004201; 1; algorithm=base,faithful=yes,bits=8
+    jgpuckering/primes_substr.pl;118;5.003789;1;algorithm=base,faithful=yes,bits=8
+    Passes: 118, Time: 5.00, Avg: 0.042405, Passes/sec: 23.6, Limit: 1000000, Count: 78498, Valid: yes
 
   primes_inlineC.pl - usine inline C set_bit_range()
-    Passes: 2909, Time: 5.001026, Avg: 0.001719, Limit: 1000000, Count: 78498, Valid: yes
-    jgpuckering/inlineC; 2909; 5.001026; 1; algorithm=base,faithful=yes,bits=8
-
+    jgpuckering/inlineC;2740;5.001672;1;algorithm=base,faithful=yes,bits=8
+    Passes: 2740, Time: 5.00, Avg: 0.001825, Passes/sec: 547.8, Limit: 1000000, Count: 78498, Valid: yes
 
 The following scripts are clones of like-named scripts (sans _jgp) that
 were modified to have command-line options and to be more consistent
@@ -287,15 +286,15 @@ Results of GitHub python solutions
 ----------------------------------
 
 PrimePY_1.py - using a list
-    Passes: 489, Time: 5.000779, Avg: 0.010226541, Limit: 1000000, Count: 78498, Valid: True
+    Passes: 489, Time: 5.000779, Avg: 0.010226541, Passes/sec: 97.8, Limit: 1000000, Count: 78498, Valid: True
     davepl; 489; 5.000778500; 1; algorithm=base,faithful=yes
 
 PrimePY_2.py - using a bytearray and array slicing
-    Passes: 3852, Time: 5.000281500, Avg: 0.001298100, Limit: 1000000, Count: 78498, Valid: True
+    Passes: 3852, Time: 5.000281500, Avg: 0.001298100, Passes/sec 770.4, Limit: 1000000, Count: 78498, Valid: True
     ssovest;  3852; 5.000281500; 1; algorithm=base,faithful=yes,bits=8
 
 PrimePY_3.py - using numpy
-    Passes: 10453, Time: 5.000337200, Avg: 0.00047836383813, Limit: 1000000, Count: 78498, Valid: True
+    Passes: 10453, Time: 5.000337200, Avg: 0.00047836383813, Passes/sec 2090.5, Limit: 1000000, Count: 78498, Valid: True
     emillynge_numpy;  10453; 5.000337200; 1; algorithm=base,faithful=no,bits=8
 
 
