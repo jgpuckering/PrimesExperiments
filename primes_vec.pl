@@ -21,8 +21,10 @@ package PrimeSieve {
     sub new {
         my ( $class, $sieve_size ) = @_;
 
-        vec(my $bv, $sieve_size, 1) = 0;
-        vec($bv, 1, 1) = 1;     # 1 is not prime
+        # use bit length of 8 because it's slightly more time-efficient
+        # (though less space efficient)
+        vec(my $bv, $sieve_size, 8) = 0;
+        vec($bv, 1, 8) = 1;     # 1 is not prime
 
         return bless {
             sieve_size => $sieve_size,
@@ -41,15 +43,15 @@ package PrimeSieve {
 
         if ($inline) {           
             for (my $factor = 3; $factor <= $q; $factor += 2) {
-                next if vec( $self->{bits}, $factor, 1 );
+                next if vec( $self->{bits}, $factor, 8 );
                 for (my $i = $factor*$factor; $i <= $size; $i += 2*$factor) {
-                    vec($self->{bits}, $i, 1) = 1;
+                    vec($self->{bits}, $i, 8) = 1;
                     # $self->{loops}++;
                 }
             }
         } else {
             for (my $factor = 3; $factor <= $q; $factor += 2) {
-                next if vec( $self->{bits}, $factor, 1 );                   
+                next if vec( $self->{bits}, $factor, 8 );                   
                 $self->set_rng( $factor*$factor, $size, 2*$factor )
                 # loops are counted in set_rng
             }           
@@ -61,10 +63,10 @@ package PrimeSieve {
         # if ($inline) {           
             # while ($factor <= $q) {
                 # $factor += 2;
-                # next if vec( $self->{bits}, $factor, 1 );
+                # next if vec( $self->{bits}, $factor, 8 );
                 # $offset = $factor * 3;
                 # while ($offset < $size) {
-                    # vec( $self->{bits}, $offset, 1 ) = 1;
+                    # vec( $self->{bits}, $offset, 8 ) = 1;
                     # $offset += $factor * 2;
                     # $self->{loops}++;
                 # }
@@ -72,7 +74,7 @@ package PrimeSieve {
         # } else {
             # while ($factor <= $q) {
                 # $factor += 2;
-                # next if vec( $self->{bits}, $factor, 1 );
+                # next if vec( $self->{bits}, $factor, 8 );
                 # $offset = $factor * 3;
                 # $self->set_rng( $offset, $size, 2*$factor )
                 # # loops are counted in set_rng
@@ -84,7 +86,7 @@ package PrimeSieve {
         my ($self, $from, $to, $step) = @_;
 
         for (my $i = $from; $i <= $to; $i += $step) {
-            vec($self->{bits}, $i, 1) = 1;
+            vec($self->{bits}, $i, 8) = 1;
             # $self->{loops}++;
         }
     }
@@ -106,7 +108,7 @@ package PrimeSieve {
 
         my @primes = (2);
         foreach (my $ii = 3; $ii < $self->{sieve_size}; $ii += 2) {
-            push @primes, $ii if not vec($self->{bits}, $ii, 1);
+            push @primes, $ii if not vec($self->{bits}, $ii, 8);
         }
         return @primes;
     }

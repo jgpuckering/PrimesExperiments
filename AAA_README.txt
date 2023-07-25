@@ -217,8 +217,8 @@ bytes.
     of loops needed to find the next non-prime is O( sqrt(N) ).
 
   primes_vec.pl - using the perl vec() operator and a set_rng() sub
-    jgpuckering/primes_vec.pl;28;5.183292;1;algorithm=base,faithful=yes,bits=8
-    Passes: 28, Time: 5.183292, Avg: 0.185118, Passes/sec: 5.4, Limit: 1000000, Count: 78498, Valid: yes
+    jgpuckering/primes_vec.pl;32;5.092001;1;algorithm=base,faithful=yes,bits=8
+    Passes: 32, Time: 5.092001, Avg: 0.159125, Passes/sec: 6.3, Limit: 1000000, Count: 78498, Valid: yes
 
     This was an attempt to use the most obvious solution to managing
     bitmaps in perl -- the vec() operator.  It uses a subroutine
@@ -227,8 +227,8 @@ bytes.
     loops are slow, so this solution performs very poorly.
 
   primes_vec.pl - using the perl vec() operator with inline of set_rng()
-    jgpuckering/primes_vec.pl;27;5.172999;1;algorithm=base,faithful=yes,bits=8
-    Passes: 27, Time: 5.172999, Avg: 0.191593, Passes/sec: 5.2, Limit: 1000000, Count: 78498, Valid: yes
+    jgpuckering/primes_vec.pl;31;5.103477;1;algorithm=base,faithful=yes,bits=8
+    Passes: 31, Time: 5.103477, Avg: 0.164628, Passes/sec: 6.1, Limit: 1000000, Count: 78498, Valid: yes
 
     Use vec() by directly looping (no subroutine) and setting the bits
     that are beyond each factor.  Once again, the performance suffers
