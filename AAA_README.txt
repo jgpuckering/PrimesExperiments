@@ -148,7 +148,7 @@ Results of GitHub perl solutions
                 unless $bits( ($factor) );
         }
 
-  perl primes_pdl_2.pl - using Inline PDL code
+  primes_pdl_2.pl - using Inline PDL code
     Passes: 1253, Time: 5.000292, Avg: 0.003991, Limit: 1000000, Count: 78498, Valid: yes
     Luis_Mochán_(wlmb)_Perl/PDL-PP; 1253; 5.000292; 1; algorithm=base,faithful=yes,bits=8
 
