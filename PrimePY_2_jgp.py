@@ -110,13 +110,16 @@ class PrimeSieve:
             count += 1
             if show_results:
                 print("%s, " % num, end="")
-
         if show_results:
             print()
-        print("Passes: %s, Time: %6f, Avg: %6f, Passes/sec: %.1f, Limit: %d, Count: %d, Valid: %s" % (passes, duration, duration/passes, passes/duration, self._size, count, self.validate_results()))
 
         # Following 2 lines added by rbergen to conform to drag race output format
         print("ssovest(jgp); %d;%6f;1;algorithm=base,faithful=yes,bits=8" % (passes, duration));
+
+        print("Passes: %s, Time: %.2f, Avg: %f, Passes/sec: %.1f, Limit: %s, Count: %s, Valid: %s" \
+            % ( passes, duration, duration/passes, passes/duration, self._size, count, self.validate_results() ), \
+            file=stderr)
+
 
 
 # MAIN Entry

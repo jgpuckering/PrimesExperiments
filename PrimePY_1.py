@@ -8,12 +8,12 @@
 #
 # Updated 3/22/2021 for Dave's Garage episode comparing C++, C#, and Python
 
-from sys import stdout                      # So I can print without an automatic python newline
+from sys import stdout, stderr              # So I can print without an automatic python newline
 from sys import argv
 from math import sqrt                       # Used by the sieve
 import timeit                               # For timing the durations
 
-class prime_sieve(object):
+class PrimeSieve(object):
 
     rawbits = None   # Storage for sieve - since we filter evens, just half as many bits
     sieveSize = 0    # Upper limit, highest prime we'll consider
@@ -35,12 +35,15 @@ class prime_sieve(object):
     # Look up our count of primes in the historical data (if we have it) to see if it matches
 
     def validateResults(this):                      # Check to see if this is an upper_limit we can
-        if this.sieveSize in this.primeCounts:      # the data, and (b) our count matches. Since it will return
-            return this.primeCounts[this.sieveSize] == this.countPrimes() # false for an unknown upper_limit, can't assume false == bad
-        return False
+        if not this.sieveSize in this.primeCounts:      # the data, and (b) our count matches. Since it will return
+            return 'unknown'
+        if this.primeCounts[this.sieveSize] == this.countPrimes(): # false for an unknown upper_limit, can't assume false == bad
+            return 'yes'
+        else:
+            return 'false'
 
     # GetBit
-    # 
+    #
     # Gets a bit from the array of bits, but automatically just filters out even numbers as false,
     # and then only uses half as many bits for actual storage
 
@@ -52,10 +55,10 @@ class prime_sieve(object):
             return this.rawbits[int(index/2)]
 
     # primeSieve
-    # 
+    #
     # Calculate the primes up to the specified limit
 
-    def runSieve(this):
+    def run_sieve(this):
 
         factor = 3
         q = sqrt(this.sieveSize)
@@ -96,27 +99,50 @@ class prime_sieve(object):
                 if (showResults):
                     stdout.write(str(num) +", ")
                 count+=1
+        if show_results:
+            stdout.write("\n");
 
         assert(count == this.countPrimes())
-        stdout.write("\n");
-        print("Passes: " + str(passes) + ", Time: " + str(duration) + ", Avg: " + str(duration/passes) + ", Limit: " + str(this.sieveSize) + ", Count: " + str(count) + ", Valid: " + str(this.validateResults()))
 
         # Following 2 lines added by rbergen to conform to drag race output format
-        stdout.write("\n");
-        print("davepl;" + str(passes) + ";" + str(duration) + ";1;algorithm=base,faithful=yes");
+        fidelity = this.validateResults()
+        print("davepl; %s;%s;1;algorithm=base,faithful=%s,bits=8" % (passes, duration, fidelity));
+
+        print("Passes: %s, Time: %.2f, Avg: %f, Passes/sec: %.1f, Limit: %s, Count: %s, Valid: %s" \
+            % ( passes, duration, duration/passes, passes/duration, this.sieveSize, count, fidelity ), \
+            file=stderr)
 
 
 # MAIN Entry
 
-tStart = timeit.default_timer()                         # Record our starting time
-passes = 0                                              # We're going to count how many passes we make in fixed window of time
-target = int(argv[1]) if len(argv) > 1 else 1000000
+from argparse import ArgumentParser
+from timeit import default_timer  # For timing the durations
 
-while (timeit.default_timer() - tStart < 5):           # Run until more than 10 seconds have elapsed
-    sieve = prime_sieve(target)                         #  Calc the primes up to a million
-    sieve.runSieve()                                    #  Find the results
-    passes = passes + 1                                 #  Count this pass
-    
+parser = ArgumentParser(description="Python Prime Sieve")
+parser.add_argument("--passes", "-p", help="Number of passes", type=int, default=0)
+parser.add_argument("--limit", "-l", help="Upper limit for calculating prime numbers", type=int, default=1_000_000)
+parser.add_argument("--time", "-t", help="Time limit", type=float, default=5)
+parser.add_argument("--show", "-s", help="Print found prime numbers", action="store_true")
+
+
+args         = parser.parse_args()
+limit        = args.limit
+timeout      = args.time
+passes       = args.passes
+show_results = args.show
+
+tStart = timeit.default_timer()                         # Record our starting time
+
+if passes > 0:
+    for n in range(0, passes):
+        sieve = PrimeSieve(limit)                          # Calc the primes up to a million
+        sieve.run_sieve()                                  # Find the results
+else:
+    while (timeit.default_timer() - tStart < 5):           # Run until more than 10 seconds have elapsed
+        sieve = PrimeSieve(limit)                         #  Calc the primes up to a million
+        sieve.run_sieve()                                    #  Find the results
+        passes = passes + 1                                 #  Count this pass
+
 tD = timeit.default_timer() - tStart                    # After the "at least 10 seconds", get the actual elapsed
 
 sieve.printResults(False, tD, passes)                   # Display outcome
