@@ -52,7 +52,7 @@ package PrimeSieve {
         } else {
             for (my $factor = 3; $factor <= $q; $factor += 2) {
                 next if vec( $self->{bits}, $factor, 8 );                   
-                $self->set_rng( $factor*$factor, $size, 2*$factor )
+                $self->set_rng( $factor*$factor, $size, 2*$factor );
                 # loops are counted in set_rng
             }           
         }
